@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>عيد الأضحى مبارك</title>
+<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Reem+Kufi:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --gold: #D4A843;
+    --gold-light: #F0C96A;
+    --gold-dim: #8a6820;
+    --green-dark: #071a0f;
+    --green-mid: #0e2d1a;
+    --green-card: #122b1a;
+    --cream: #fdf3d8;
+    --white: #ffffff;
+  }
+
+  html, body {
+    height: 100%;
+    overflow: hidden;
+  }
+
+  body {
+    background: var(--green-dark);
+    font-family: 'Amiri', serif;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+  }
+
+  /* ── Geometric pattern overlay ── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      repeating-linear-gradient(45deg, rgba(212,168,67,0.04) 0, rgba(212,168,67,0.04) 1px, transparent 0, transparent 50%),
+      repeating-linear-gradient(-45deg, rgba(212,168,67,0.04) 0, rgba(212,168,67,0.04) 1px, transparent 0, transparent 50%);
+    background-size: 30px 30px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ── Radial glow behind card ── */
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: radial-gradient(ellipse 70% 60% at 50% 55%, rgba(212,168,67,0.12) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ── Floating particles ── */
+  #particles {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1;
+    overflow: hidden;
+  }
+  .p {
+    position: absolute;
+    bottom: -20px;
+    opacity: 0;
+    animation: rise var(--dur) var(--delay) ease-in infinite;
+    font-size: var(--sz);
+    user-select: none;
+  }
+  @keyframes rise {
+    0%   { transform: translateY(0) rotate(0deg) scale(0.5); opacity: 0; }
+    10%  { opacity: 1; }
+    85%  { opacity: .7; }
+    100% { transform: translateY(-110vh) rotate(var(--rot)) scale(1.2); opacity: 0; }
+  }
+
+  /* ── Entry overlay ── */
+  #overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 50;
+    background: var(--green-dark);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 28px;
+    cursor: pointer;
+    transition: opacity .9s ease, visibility .9s ease;
+  }
+  #overlay.gone {
+    opacity: 0;
+    visibility: hidden;
+  }
+  .enter-sheep {
+  font-size: 5rem;
+  animation: moonPulse 2s ease-in-out infinite;
+  filter: drop-shadow(0 0 24px rgba(212,168,67,0.7));
+}
+  @keyframes moonPulse {
+    0%,100% { transform: scale(1); }
+    50%      { transform: scale(1.12); }
+  }
+  .enter-text {
+    font-size: 1.4rem;
+    color: var(--gold-light);
+    font-family: 'Amiri', serif;
+    letter-spacing: .05em;
+    text-align: center;
+    line-height: 1.9;
+  }
+  .enter-btn {
+    background: linear-gradient(135deg, #b8882e, #e8c05a, #b8882e);
+    border: none;
+    color: var(--green-dark);
+    font-family: 'Amiri', serif;
+    font-size: 1.2rem;
+    font-weight: 700;
+    padding: 14px 44px;
+    border-radius: 50px;
+    cursor: pointer;
+    box-shadow: 0 6px 30px rgba(212,168,67,0.45);
+    transition: transform .2s, box-shadow .2s;
+  }
+  .enter-btn:active { transform: scale(.96); }
+
+  /* ── Main card ── */
+  #card {
+    position: relative;
+    z-index: 10;
+    width: min(92vw, 400px);
+    background: linear-gradient(160deg, #1c3d26 0%, var(--green-card) 60%, #0a200f 100%);
+    border-radius: 28px;
+    padding: 36px 28px 32px;
+    text-align: center;
+    box-shadow:
+      0 0 0 1px var(--gold-dim),
+      0 0 0 3px rgba(212,168,67,0.08),
+      0 20px 80px rgba(0,0,0,0.7),
+      0 0 60px rgba(212,168,67,0.15) inset;
+    opacity: 0;
+    transform: translateY(30px) scale(.95);
+    transition: opacity .9s ease, transform .9s cubic-bezier(.34,1.56,.64,1);
+  }
+  #card.visible {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+
+  /* Corner ornaments */
+  .corner {
+    position: absolute;
+    color: var(--gold);
+    font-size: 22px;
+    opacity: .6;
+    line-height: 1;
+  }
+  .corner.tr { top: 14px; right: 14px; }
+  .corner.tl { top: 14px; left: 14px; }
+  .corner.br { bottom: 14px; right: 14px; transform: rotate(180deg); }
+  .corner.bl { bottom: 14px; left: 14px; transform: rotate(180deg); }
+
+  /* Top crescent */
+  .crescent {
+    font-size: 2.8rem;
+    line-height: 1;
+    margin-bottom: 4px;
+    filter: drop-shadow(0 0 14px rgba(212,168,67,0.6));
+    animation: floatY 3.5s ease-in-out infinite;
+  }
+  @keyframes floatY {
+    0%,100% { transform: translateY(0); }
+    50%      { transform: translateY(-7px); }
+  }
+
+  /* Sheep */
+  .sheep-wrap {
+    margin: 0 auto 10px;
+    width: 170px;
+    animation: sheepBob 2.8s ease-in-out infinite;
+  }
+  @keyframes sheepBob {
+    0%,100% { transform: translateY(0) rotate(-.5deg); }
+    50%      { transform: translateY(-9px) rotate(.5deg); }
+  }
+
+  /* Divider */
+  .divider {
+    height: 1px;
+    background: linear-gradient(to right, transparent, var(--gold-dim), var(--gold), var(--gold-dim), transparent);
+    margin: 14px auto;
+    width: 75%;
+    position: relative;
+  }
+  .divider::after {
+    content: '✦';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    background: var(--green-card);
+    color: var(--gold);
+    font-size: 12px;
+    padding: 0 6px;
+  }
+
+  /* Typography */
+  .eid-label {
+    font-size: .85rem;
+    color: var(--gold-dim);
+    letter-spacing: .15em;
+    text-transform: uppercase;
+    font-family: 'Reem Kufi', sans-serif;
+    margin-bottom: 4px;
+  }
+  .eid-title {
+    font-size: clamp(1.9rem, 7vw, 2.4rem);
+    color: var(--gold-light);
+    font-weight: 700;
+    line-height: 1.2;
+    text-shadow: 0 0 30px rgba(240,201,106,0.5);
+    animation: textGlow 3s ease-in-out infinite alternate;
+    margin-bottom: 2px;
+  }
+  @keyframes textGlow {
+    from { text-shadow: 0 0 18px rgba(240,201,106,0.3); }
+    to   { text-shadow: 0 0 36px rgba(240,201,106,0.8), 0 0 70px rgba(212,168,67,0.3); }
+  }
+  .greeting {
+    color: var(--cream);
+    font-size: 1.15rem;
+    line-height: 2;
+    opacity: .88;
+    margin: 8px 0;
+  }
+  .name-line {
+    font-size: clamp(1.8rem, 8vw, 2.6rem);
+    color: var(--gold-light);
+    font-weight: 700;
+    text-shadow: 0 0 20px rgba(240,201,106,0.45);
+    margin: 6px 0 10px;
+    font-family: 'Amiri', serif;
+  }
+  .footer-text {
+    color: var(--gold-dim);
+    font-size: 1rem;
+    opacity: .85;
+    margin-top: 4px;
+    line-height: 1.8;
+  }
+</style>
+</head>
+<body>
+
+<!-- ── Entry overlay ── -->
+<div id="overlay" onclick="startExperience()">
+  <div class="enter-sheep">🐑</div>
+  <div class="enter-text">
+    بمناسبة عيد الأضحى المبارك<br>
+    <small style="font-size:.85em;opacity:.7">اضغط للفتح</small>
+  </div>
+  <button class="enter-btn">افتح التهنئة ✨</button>
+</div>
+
+<!-- ── Floating particles ── -->
+<div id="particles"></div>
+
+<!-- ── Main greeting card ── -->
+<div id="card">
+  <div class="corner tr">❧</div>
+  <div class="corner tl">❧</div>
+  <div class="corner br">❧</div>
+  <div class="corner bl">❧</div>
+
+
+
+  <!-- Sheep SVG -->
+  <div class="sheep-wrap">
+    <svg viewBox="0 0 220 190" xmlns="http://www.w3.org/2000/svg">
+      <!-- Shadow -->
+      <ellipse cx="110" cy="182" rx="55" ry="7" fill="rgba(0,0,0,0.2)"/>
+
+      <!-- Wool body - layered fluffy circles -->
+      <circle cx="90"  cy="115" r="36" fill="#f2ede8"/>
+      <circle cx="75"  cy="100" r="30" fill="#f6f2ee"/>
+      <circle cx="95"  cy="90"  r="33" fill="#fafaf8"/>
+      <circle cx="122" cy="92"  r="32" fill="#f9f7f5"/>
+      <circle cx="145" cy="105" r="28" fill="#f4f0eb"/>
+      <circle cx="130" cy="120" r="30" fill="#f0ebe5"/>
+      <circle cx="103" cy="128" r="32" fill="#f5f1ec"/>
+      <circle cx="110" cy="108" r="28" fill="white"/>
+
+      <!-- Legs -->
+      <rect x="82"  y="150" width="15" height="30" rx="6" fill="#8B6F4E"/>
+      <rect x="100" y="152" width="15" height="28" rx="6" fill="#7A5F3E"/>
+      <rect x="118" y="150" width="15" height="30" rx="6" fill="#8B6F4E"/>
+      <rect x="136" y="152" width="15" height="28" rx="6" fill="#7A5F3E"/>
+      <!-- Hooves -->
+      <rect x="82"  y="174" width="15" height="8" rx="4" fill="#3d2b14"/>
+      <rect x="100" y="174" width="15" height="8" rx="4" fill="#3d2b14"/>
+      <rect x="118" y="174" width="15" height="8" rx="4" fill="#3d2b14"/>
+      <rect x="136" y="174" width="15" height="8" rx="4" fill="#3d2b14"/>
+
+      <!-- Head -->
+      <ellipse cx="170" cy="118" rx="26" ry="23" fill="#9e7d5a"/>
+      <!-- Ear -->
+      <ellipse cx="155" cy="101" rx="10" ry="16" fill="#9e7d5a" transform="rotate(-25 155 101)"/>
+      <ellipse cx="155" cy="101" rx="6"  ry="11" fill="#c9a07a" transform="rotate(-25 155 101)"/>
+      <!-- Eye white -->
+      <ellipse cx="179" cy="113" rx="7" ry="8" fill="white"/>
+      <!-- Pupil -->
+      <ellipse cx="180" cy="114" rx="4" ry="5" fill="#1a1008"/>
+      <!-- Eye shine -->
+      <circle cx="181" cy="111" r="1.8" fill="white"/>
+      <!-- Nose -->
+      <ellipse cx="187" cy="128" rx="7" ry="4" fill="#7a5033"/>
+      <circle cx="184" cy="127" r="2" fill="#4a2a14"/>
+      <circle cx="190" cy="127" r="2" fill="#4a2a14"/>
+      <!-- Smile -->
+      <path d="M182 133 Q187 137 192 133" stroke="#5a3a1a" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+
+      <!-- Flower garland on wool -->
+      <circle cx="82"  cy="94"  r="7" fill="#e74c3c"/>
+      <circle cx="79"  cy="87"  r="5" fill="#f39c12"/>
+      <circle cx="86"  cy="82"  r="6" fill="#fff" stroke="#e74c3c" stroke-width="1.5"/>
+      <circle cx="95"  cy="78"  r="6" fill="#e74c3c"/>
+      <circle cx="106" cy="76"  r="5" fill="#f39c12"/>
+      <circle cx="116" cy="78"  r="7" fill="#27ae60"/>
+      <circle cx="126" cy="83"  r="5" fill="#e74c3c"/>
+      <circle cx="134" cy="90"  r="6" fill="#f39c12"/>
+      <!-- Flower centers -->
+      <circle cx="82"  cy="94"  r="2.5" fill="#f39c12"/>
+      <circle cx="95"  cy="78"  r="2.5" fill="#f39c12"/>
+      <circle cx="116" cy="78"  r="2.5" fill="#f39c12"/>
+      <circle cx="126" cy="83"  r="2"   fill="#fff"/>
+    </svg>
+  </div>
+
+  <div class="eid-label">عيد مبارك</div>
+  <div class="eid-title">عيد الأضحى المبارك</div>
+
+  <div class="divider"></div>
+
+ <div class="greeting" style="font-size: clamp(1.8rem, 7vw, 2.5rem); font-weight: 700; color: #F0C96A; text-shadow: 0 0 20px rgba(240,201,106,0.45); line-height: 1.6;">
+  كل عام وأنتم بخير
+</div>
+
+  <div class="divider"></div>
+
+  <div class="footer-text">
+    تقبّل الله منا ومنكم صالح الأعمال 🤲<br>
+    <span style="font-size:.88rem;opacity:.7">وأعاده الله عليكم بالخير واليُمن والبركات</span>
+  </div>
+  <div style="
+  margin-top:18px;
+  color:#D4A843;
+  opacity:.7;
+  font-size:.85rem;
+  font-family:'Reem Kufi', sans-serif;
+">
+ Done by Eng.Abdelrahman Al-Qadi
+</div>
+</div>
+
+<script>
+/* ── Read name from ?name=... ── */
+document.title = 'عيد الأضحى المبارك';
+/* ── Floating particles ── */
+function spawnParticles() {
+  const container = document.getElementById('particles');
+  const glyphs = ['✦','★','✵','✶','✸','🌟','⭐','✨','🌙','💫','❋','❀','✿'];
+  for (let i = 0; i < 35; i++) {
+    const el = document.createElement('div');
+    el.className = 'p';
+    el.textContent = glyphs[Math.floor(Math.random() * glyphs.length)];
+    const size = 10 + Math.random() * 18;
+    el.style.cssText = `
+      left: ${Math.random() * 100}%;
+      --sz: ${size}px;
+      --dur: ${7 + Math.random() * 10}s;
+      --delay: ${Math.random() * 12}s;
+      --rot: ${(Math.random() - .5) * 720}deg;
+      color: ${Math.random() > .5 ? '#D4A843' : '#F0C96A'};
+      filter: drop-shadow(0 0 4px rgba(212,168,67,0.5));
+    `;
+    container.appendChild(el);
+  }
+}
+
+/* ── Web Audio chime ── */
+function playChime() {
+  const audio = new Audio('eid.mp3');
+  audio.volume = 1;
+  audio.play();
+}
+
+   
+/* ── Start experience ── */
+function startExperience() {
+  playChime();
+  spawnParticles();
+  document.getElementById('overlay').classList.add('gone');
+  setTimeout(() => document.getElementById('card').classList.add('visible'), 100);
+}
+</script>
+</body>
+</html>
